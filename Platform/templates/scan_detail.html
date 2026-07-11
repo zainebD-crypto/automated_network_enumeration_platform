@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %}{{ scan.name }} — ANCScan{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <div>
+    <a href="{{ url_for('scans.dashboard') }}" class="back-link">‹ Back to My Scans</a>
+    <h1>{{ scan.name }}</h1>
+  </div>
+  <div class="page-actions">
+    <button class="btn-secondary" id="reportBtn" onclick="openReportModal()">⬇ Export PDF Report</button>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="hosts">Hosts <span class="tab-count" id="hostsCount">0</span></div>
+  <div class="tab" data-tab="findings">Findings <span class="tab-count" id="findingsCount">0</span></div>
+</div>
+
+<div class="scan-layout">
+  <div class="scan-main">
+
+    <div class="tab-panel active" id="panel-hosts">
+      <div class="panel">
+        <div class="host-list" id="hostList">
+          <div class="empty-state">Loading...</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-panel" id="panel-findings">
+      <div class="panel">
+        <div style="margin-bottom:12px;">
+          <select class="host-filter" id="findingsHostFilter" onchange="renderFindings()">
+            <option value="">All hosts</option>
+          </select>
+        </div>
+        <div id="findingsResults" class="empty-state">No findings yet.</div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Execution Console</h2>
+      <div id="console"><div>Loading log...</div></div>
+    </div>
+  </div>
+
+  <div class="scan-sidebar">
+    <div class="panel">
+      <h2>Scan Details</h2>
+      <dl class="detail-list">
+        <dt>Status</dt><dd id="detailStatus">—</dd>
+        <dt>Hosts</dt><dd id="detailHosts">—</dd>
+        <dt>Started</dt><dd id="detailStarted">—</dd>
+        <dt>Duration</dt><dd id="detailDuration">—</dd>
+      </dl>
+    </div>
+    <div class="panel">
+      <h2>Vulnerabilities</h2>
+      <div class="donut-wrap" id="sevDonutWrap"></div>
+    </div>
+
+    <div class="panel chat-panel">
+      <h2>Ask ANCScan <span class="panel-sub">advisory only — reads this scan's data, never acts</span></h2>
+      <div class="chat-messages" id="chatMessages">
+        <div class="empty-state">Ask about this scan's findings, priorities, or remediation wording.</div>
+      </div>
+      <div class="chat-input-row">
+        <input type="text" id="chatInput" placeholder="e.g. which findings should I prioritize?" onkeydown="if(event.key==='Enter') sendChatMessage()">
+        <button class="btn-primary" id="chatSendBtn" onclick="sendChatMessage()">Send</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===================== Export Report modal ===================== -->
+<div class="modal-overlay" id="reportModal">
+  <div class="modal">
+    <h2>Generate Report</h2>
+
+    <div class="field">
+      <label>Report Name</label>
+      <input id="reportName" value="{{ scan.name }}">
+    </div>
+
+    <div class="field">
+      <label>Client / Engagement Name</label>
+      <input id="reportClient" placeholder="e.g. ANCS Cyber Defense">
+    </div>
+
+    <div class="field">
+      <label>Author</label>
+      <input id="reportAuthor" value="{{ current_user.username }}">
+    </div>
+
+    <div class="field">
+      <label>Format</label>
+      <select id="reportFormat" disabled>
+        <option>PDF</option>
+      </select>
+      <span class="field-hint">Only PDF export is currently supported.</span>
+    </div>
+
+    <div class="modal-error" id="reportModalError" style="display:none;"></div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeReportModal()">Cancel</button>
+      <button class="btn-primary" id="reportExportBtn" onclick="downloadReport()">⬇ Export</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script>const SCAN_ID = {{ scan.id }};</script>
+<script src="{{ url_for('static', filename='js/scan_detail.js') }}"></script>
+{% endblock %}

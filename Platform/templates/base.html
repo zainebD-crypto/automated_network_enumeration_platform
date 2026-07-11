@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>{% block title %}ANCScan{% endblock %}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<div class="app-shell">
+
+  <aside class="sidebar">
+    <a href="{{ url_for('scans.dashboard') }}" class="sidebar-logo">ANC<span>Scan</span></a>
+
+    <nav class="sidebar-nav">
+      <a href="{{ url_for('scans.dashboard') }}" class="{{ 'active' if request.endpoint == 'scans.dashboard' else '' }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        My Scans
+      </a>
+      <a href="{{ url_for('scans.vulnerabilities_page') }}" class="{{ 'active' if request.endpoint == 'scans.vulnerabilities_page' else '' }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4M12 17h.01"></path><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path></svg>
+        Vulnerabilities
+      </a>
+      <a href="{{ url_for('scans.analytics_page') }}" class="{{ 'active' if request.endpoint == 'scans.analytics_page' else '' }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17V5"></path><path d="M8 17v-3"></path></svg>
+        Analytics
+      </a>
+      {% if current_user.is_admin %}
+      <a href="{{ url_for('team.team_page') }}" class="{{ 'active' if request.endpoint == 'team.team_page' else '' }}">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Team
+      </a>
+      {% endif %}
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-user">{{ current_user.username }}</div>
+      <a href="{{ url_for('auth.logout') }}" class="sidebar-logout">Log out</a>
+    </div>
+  </aside>
+
+  <div class="main-area">
+
+    <header class="topbar-slim">
+      <div class="topbar-slim-title">{% block page_title %}{% endblock %}</div>
+      <div class="topbar-right">
+        <div class="notif-wrap">
+          <button id="notifBell" class="icon-btn" onclick="toggleNotifDropdown()" title="Notifications">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"></path>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+            </svg>
+            <span id="notifBadge" class="notif-badge" style="display:none;">0</span>
+          </button>
+          <div id="notifDropdown" class="notif-dropdown"></div>
+        </div>
+      </div>
+    </header>
+
+    <div class="page">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-container">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+
+  </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/notifications.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

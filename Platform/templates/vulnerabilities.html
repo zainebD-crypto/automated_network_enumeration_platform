@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Vulnerabilities{% endblock %}
+{% block page_title %}Vulnerabilities{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Vulnerabilities</h1>
+  <span class="panel-sub" id="vulnCount" style="font-size:13px;"></span>
+</div>
+
+<div class="panel">
+  <div class="vuln-filters">
+    <input type="text" id="vulnSearch" placeholder="Search title, host, or detail..." class="vuln-search-input" oninput="renderVulnTable()">
+
+    <div class="vuln-sev-toggles" id="vulnSevToggles">
+      <button type="button" class="sev-toggle sev-toggle-critical active" data-sev="Critical" onclick="toggleSevFilter(this)">Critical</button>
+      <button type="button" class="sev-toggle sev-toggle-high active" data-sev="High" onclick="toggleSevFilter(this)">High</button>
+      <button type="button" class="sev-toggle sev-toggle-medium active" data-sev="Medium" onclick="toggleSevFilter(this)">Medium</button>
+      <button type="button" class="sev-toggle sev-toggle-low active" data-sev="Low" onclick="toggleSevFilter(this)">Low</button>
+      <button type="button" class="sev-toggle sev-toggle-info active" data-sev="Info" onclick="toggleSevFilter(this)">Info</button>
+    </div>
+
+    <select id="vulnCategoryFilter" class="host-filter" onchange="renderVulnTable()">
+      <option value="">All categories</option>
+    </select>
+  </div>
+
+  <div id="vulnTableWrap">
+    <div class="empty-state">Loading vulnerabilities...</div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/vulnerabilities.js') }}"></script>
+{% endblock %}

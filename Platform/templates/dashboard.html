@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+{% block title %}ANCScan{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>My Scans</h1>
+  <button class="btn-primary" onclick="openNewScanModal()">+ New Scan</button>
+</div>
+
+<div class="panel">
+  <table class="data-table" id="scansTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Status</th>
+        <th>Hosts</th>
+        <th>Findings</th>
+        <th>Started</th>
+        <th>Duration</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="scansTableBody">
+      <tr><td colspan="7" class="empty-state">Loading scans...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===================== New Scan modal ===================== -->
+<div class="modal-overlay" id="newScanModal">
+  <div class="modal">
+    <h2>New Scan</h2>
+
+    <div class="field">
+      <label>Scan Name <span class="dim">(optional — auto-generated if left blank)</span></label>
+      <input id="scanName" placeholder="e.g. Internal Network — Week 27">
+    </div>
+
+    <div class="field">
+      <label>Target IP(s)</label>
+      <div class="targets-list" id="targetsList">
+        <div class="target-row">
+          <input class="target-input" placeholder="Target IP">
+          <button type="button" class="target-remove-btn" onclick="removeTargetRow(this)" disabled title="At least one target required">✕</button>
+        </div>
+      </div>
+      <button type="button" id="addTargetBtn" onclick="addTargetRow()">+ Add Target</button>
+      <span class="field-hint">Add one row per host you want scanned in this run. Large lists run in a bounded worker pool, so a big batch will queue rather than overload the box.</span>
+    </div>
+
+    <div class="ad-toggle-row">
+      <label class="switch">
+        <input type="checkbox" id="adToggle" onchange="toggleAdFields()">
+        <span class="switch-slider"></span>
+      </label>
+      <span>One of these targets is an Active Directory Domain Controller</span>
+    </div>
+    <div class="field-hint" style="margin:2px 0 14px 50px;">Turn this off when scanning web servers, standalone clients, or anything not domain-related — AD/Kerberos enumeration will be skipped entirely.</div>
+
+    <div class="ad-fields disabled" id="adFields">
+      <div class="field"><label>Domain</label><input id="domain" placeholder="e.g. ancs.local"></div>
+      <div class="field"><label>DC IP (LDAP)</label><input id="dcIp" placeholder="IP address"></div>
+      <div class="field"><label>AD Username <span class="dim">(optional)</span></label><input id="adUsername" placeholder="leave blank for anonymous-only checks"></div>
+      <div class="field"><label>AD Password <span class="dim">(optional)</span></label><input id="adPassword" type="password" placeholder="leave blank for anonymous-only checks"></div>
+    </div>
+
+    <div class="modal-error" id="modalError" style="display:none;"></div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeNewScanModal()">Cancel</button>
+      <button class="btn-primary" id="launchScanBtn" onclick="launchScan()">Launch Scan</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %}

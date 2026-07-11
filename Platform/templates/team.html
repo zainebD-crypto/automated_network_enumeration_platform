@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% block title %}Team{% endblock %}
+{% block page_title %}Team{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Team</h1>
+  <button class="btn-primary" onclick="openAddMemberModal()">+ Add Team Member</button>
+</div>
+
+<div class="panel">
+  <table class="data-table" id="teamTable">
+    <thead>
+      <tr>
+        <th>Username</th><th>Email</th><th>Role</th><th>Joined</th><th></th>
+      </tr>
+    </thead>
+    <tbody id="teamTableBody">
+      <tr><td colspan="5" class="empty-state">Loading team...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ===================== Add Team Member modal ===================== -->
+<div class="modal-overlay" id="addMemberModal">
+  <div class="modal">
+    <h2>Add Team Member</h2>
+
+    <div class="field">
+      <label>Username</label>
+      <input id="memberUsername" placeholder="e.g. jsmith">
+    </div>
+    <div class="field">
+      <label>Email</label>
+      <input id="memberEmail" type="email" placeholder="jsmith@ancs.tn">
+    </div>
+    <div class="ad-toggle-row">
+      <label class="switch">
+        <input type="checkbox" id="memberIsAdmin">
+        <span class="switch-slider"></span>
+      </label>
+      <span>Grant admin access (can manage the team)</span>
+    </div>
+    <div class="field-hint" style="margin:6px 0 14px 50px;">
+      A temporary password is generated automatically. The new member sets their own password via a setup link — either emailed to them (if SMTP is configured) or shown here for you to share manually.
+    </div>
+
+    <div class="modal-error" id="addMemberError" style="display:none;"></div>
+    <div class="dev-setup-link" id="devSetupLink" style="display:none;"></div>
+
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeAddMemberModal()">Cancel</button>
+      <button class="btn-primary" id="addMemberBtn" onclick="addTeamMember()">Add Member</button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/team.js') }}"></script>
+{% endblock %}

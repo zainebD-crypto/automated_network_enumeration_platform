@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Analytics{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>Analytics</h1>
+</div>
+
+<div class="kpi-row" id="kpiRow">
+  <div class="kpi-card">
+    <div class="kpi-value" id="kpiScans">—</div>
+    <div class="kpi-label">Total Scans</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" id="kpiHosts">—</div>
+    <div class="kpi-label">Hosts Scanned</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" id="kpiFindings">—</div>
+    <div class="kpi-label">Total Findings</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-value" id="kpiDuration">—</div>
+    <div class="kpi-label">Avg. Scan Duration</div>
+  </div>
+</div>
+
+<div class="analytics-grid">
+
+  <div class="panel analytics-wide">
+    <h2>Findings Severity Over Time <span class="panel-sub">across all scans, chronological</span></h2>
+    <div id="trendChart"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Findings by Category</h2>
+    <div class="donut-wrap" id="categoryDonutWrap"></div>
+  </div>
+
+  <div class="panel">
+    <h2>Riskiest Hosts <span class="panel-sub">by Critical / High findings</span></h2>
+    <div id="riskiestHosts"></div>
+  </div>
+
+  <div class="panel analytics-wide">
+    <h2>Recurring Findings <span class="panel-sub">same issue seen more than once across your scan history</span></h2>
+    <div id="recurringTable"></div>
+  </div>
+
+</div>
+
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/analytics.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Log in — ANCScan</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-body">
+  <div class="login-card">
+    <div class="login-logo">ANC<span>Scan</span></div>
+    <div class="login-sub">Automated Network Enumeration Platform</div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" name="username" autofocus required>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" name="password" required>
+      </div>
+      <button type="submit" class="btn-primary full-width">Log In</button>
+    </form>
+    <div style="text-align:center;margin-top:16px;">
+      <a href="{{ url_for('auth.forgot_password') }}" style="font-size:12.5px;color:var(--accent);text-decoration:none;">Forgot password?</a>
+    </div>
+  </div>
+</body>
+</html>
