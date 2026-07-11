@@ -13,7 +13,7 @@ AI advisory assistant grounded in each scan's actual findings.
 > explicitly authorized to test.
 
 ---
-![ANCScan Dashboard](assets/dashboard-screenshot.png)
+![ANCScan Dashboard](Screenshot From 2026-07-11 22-53-30.png)
 ## Project Structure
 
 ```
