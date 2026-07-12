@@ -1,6 +1,6 @@
-# ANCScan — Automated Network Enumeration Platform
+#  Automated Network Enumeration Platform
 
-## 1. Short Intro
+## 1. Introduction
 
 ANCScan automates the reconnaissance and enumeration phase of an internal
 penetration test — the repetitive, mechanical part that normally takes an
